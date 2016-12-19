@@ -5,6 +5,11 @@
  */
 package pkg10chat.View;
 
+import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+
 /**
  *
  * @author kevin
@@ -29,21 +34,66 @@ public class ChatView extends javax.swing.JFrame
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents()
   {
+    java.awt.GridBagConstraints gridBagConstraints;
+
+    jScrollPane1 = new javax.swing.JScrollPane();
+    tpHistory = new javax.swing.JTextPane();
+    jPanel1 = new javax.swing.JPanel();
+    jScrollPane2 = new javax.swing.JScrollPane();
+    taMessage = new javax.swing.JTextArea();
+    btnSend = new javax.swing.JButton();
+    jMenuBar1 = new javax.swing.JMenuBar();
+    mnFile = new javax.swing.JMenu();
+    mnConnect = new javax.swing.JMenu();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("MyChat");
+    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 400, Short.MAX_VALUE)
-    );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 300, Short.MAX_VALUE)
-    );
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 353));
 
-    pack();
+    tpHistory.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+    tpHistory.setEnabled(false);
+    tpHistory.setFocusable(false);
+    tpHistory.setMinimumSize(new java.awt.Dimension(280, 300));
+    tpHistory.setPreferredSize(new java.awt.Dimension(280, 350));
+    jScrollPane1.setViewportView(tpHistory);
+
+    getContentPane().add(jScrollPane1);
+
+    jPanel1.setLayout(new java.awt.GridBagLayout());
+
+    jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    jScrollPane2.setAlignmentX(0.0F);
+    jScrollPane2.setAlignmentY(0.0F);
+
+    taMessage.setColumns(22);
+    taMessage.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+    taMessage.setRows(5);
+    jScrollPane2.setViewportView(taMessage);
+
+    jPanel1.add(jScrollPane2, new java.awt.GridBagConstraints());
+
+    btnSend.setText("Send");
+    btnSend.setToolTipText("send the message");
+    btnSend.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    jPanel1.add(btnSend, gridBagConstraints);
+
+    getContentPane().add(jPanel1);
+
+    mnFile.setText("File");
+    jMenuBar1.add(mnFile);
+
+    mnConnect.setText("Connection");
+    jMenuBar1.add(mnConnect);
+
+    setJMenuBar(jMenuBar1);
+
+    setSize(new java.awt.Dimension(310, 530));
+    setLocationRelativeTo(null);
   }// </editor-fold>//GEN-END:initComponents
 
   /**
@@ -95,6 +145,40 @@ public class ChatView extends javax.swing.JFrame
     });
   }
 
+  public JButton getBtnSend()
+  {
+    return btnSend;
+  }
+
+  public JTextArea getTaMessage()
+  {
+    return taMessage;
+  }
+
+  public JMenu getMnConnect()
+  {
+    return mnConnect;
+  }
+
+  public JMenu getMnFile()
+  {
+    return mnFile;
+  }
+
+  public JTextPane getTpHistory()
+  {
+    return tpHistory;
+  }
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton btnSend;
+  private javax.swing.JMenuBar jMenuBar1;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JScrollPane jScrollPane2;
+  private javax.swing.JMenu mnConnect;
+  private javax.swing.JMenu mnFile;
+  private javax.swing.JTextArea taMessage;
+  private javax.swing.JTextPane tpHistory;
   // End of variables declaration//GEN-END:variables
 }

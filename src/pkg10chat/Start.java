@@ -6,6 +6,10 @@
 
 package pkg10chat;
 
+import pkg10chat.Controller.ConnectController;
+import pkg10chat.Model.Transmitter;
+import pkg10chat.View.ChatView;
+
 /**
  * Builder Class
  * @author kevin
@@ -14,7 +18,11 @@ public class Start
 {
   public Start()
   {
-
+    Transmitter model = new Transmitter();
+    ChatView view = new ChatView();
+    ConnectController cController = new ConnectController(view, model);
+    cController.registerEvents();
+    view.setVisible(true);
   }
 
   /**
