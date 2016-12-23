@@ -15,22 +15,49 @@ import java.util.Observable;
 public class Transmitter extends Observable implements Runnable
 {
   private Boolean server;
+  private ServerClientInterface servClient;
+  private Boolean connected;
+
+ 
   
   public Transmitter()
   {
     server = false;
+    connected = false;
   }
   
   public void connect()
   {
-    
+    if(server)
+    {
+      servClient = new Server();
+    }
+    else
+    {
+      servClient = new Client();
+    }
+     servClient.connect();
+     connected = true;
+     this.setChanged();
+     this.notifyObservers();
   }
 
   @Override
   public void run()
   {
+    servClient.disconnect();
+  }
+  
+  public Boolean getConnected()
+  {
+    return connected;
   }
 
+  public void setConnected(Boolean connected)
+  {
+    this.connected = connected;
+  }
+  
   public Boolean getServer()
   {
     return server;

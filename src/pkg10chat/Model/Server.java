@@ -6,8 +6,16 @@
 
 package pkg10chat.Model;
 
+import Logger.OhmLogger;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
 
 /**
  *
@@ -16,8 +24,9 @@ import java.net.Socket;
 public class Server implements ServerClientInterface
 {
   private BufferedReader reader;
+  private PrintWriter writer;
   private Socket s;
-  final static int PORT = 2468;
+  final static int PORT = 24680;
   
   public Server()
   {
@@ -29,28 +38,59 @@ public class Server implements ServerClientInterface
   {
     try
     {
-      
+      ServerSocket ss = new ServerSocket(PORT);
+      //OhmLogger.getLogger().info("warte auf Verbindung..");
+      this.s = ss.accept();
+      //OhmLogger.getLogger().info("Verbindung hergestellt.");
+      InputStream is = s.getInputStream();
+      InputStreamReader isr = new InputStreamReader(is);
+      this.reader = new BufferedReader(isr);
+      OutputStream os = s.getOutputStream();
+      this.writer = new PrintWriter(os);
     }
     catch(Exception ex)
     {
-      
+      OhmLogger.getLogger().severe("failed to establish server-side of the connection");
+      OhmLogger.getLogger().severe(ex.toString());
     }
   }
 
   @Override
   public void disconnect()
   {
+    try
+    {
+      s.close();
+      OhmLogger.getLogger().info("Verbindung geschlossen.");
+    }
+    catch (IOException ex)
+    {
+      OhmLogger.getLogger().log(Level.SEVERE, null, ex);
+    }
   }
 
   @Override
-  public void send()
+  public void send(String message)
   {
+    this.writer.println(message);
+    this.writer.flush();
   }
 
   @Override
   public String receive()
   {
-    return "";
+    String message = "";
+    
+    try
+    {
+      message = this.reader.readLine();
+    }
+    catch (IOException ex)
+    {
+      OhmLogger.getLogger().log(Level.SEVERE, null, ex);
+    }
+    
+    return message;
   }
 
 }

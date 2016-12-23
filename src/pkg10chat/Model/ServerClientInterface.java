@@ -13,6 +13,6 @@ public interface ServerClientInterface
 {
   public void connect();
   public void disconnect();
-  public void send();
+  public void send(String message);
   public String receive();
 }

@@ -36,15 +36,20 @@ public class ChatView extends javax.swing.JFrame
   {
     java.awt.GridBagConstraints gridBagConstraints;
 
+    jLabel1 = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
     tpHistory = new javax.swing.JTextPane();
     jPanel1 = new javax.swing.JPanel();
     jScrollPane2 = new javax.swing.JScrollPane();
     taMessage = new javax.swing.JTextArea();
     btnSend = new javax.swing.JButton();
+    jPanel2 = new javax.swing.JPanel();
+    jRadioButton1 = new javax.swing.JRadioButton();
     jMenuBar1 = new javax.swing.JMenuBar();
     mnFile = new javax.swing.JMenu();
     mnConnect = new javax.swing.JMenu();
+
+    jLabel1.setText("jLabel1");
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("MyChat");
@@ -68,9 +73,10 @@ public class ChatView extends javax.swing.JFrame
     jScrollPane2.setAlignmentX(0.0F);
     jScrollPane2.setAlignmentY(0.0F);
 
-    taMessage.setColumns(22);
+    taMessage.setColumns(28);
     taMessage.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
     taMessage.setRows(5);
+    taMessage.setAutoscrolls(false);
     jScrollPane2.setViewportView(taMessage);
 
     jPanel1.add(jScrollPane2, new java.awt.GridBagConstraints());
@@ -83,6 +89,12 @@ public class ChatView extends javax.swing.JFrame
     jPanel1.add(btnSend, gridBagConstraints);
 
     getContentPane().add(jPanel1);
+
+    jRadioButton1.setText("Connected");
+    jRadioButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    jPanel2.add(jRadioButton1);
+
+    getContentPane().add(jPanel2);
 
     mnFile.setText("File");
     jMenuBar1.add(mnFile);
@@ -172,8 +184,11 @@ public class ChatView extends javax.swing.JFrame
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton btnSend;
+  private javax.swing.JLabel jLabel1;
   private javax.swing.JMenuBar jMenuBar1;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
+  private javax.swing.JRadioButton jRadioButton1;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JMenu mnConnect;
