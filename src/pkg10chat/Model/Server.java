@@ -27,7 +27,7 @@ public class Server implements ServerClientInterface
   private BufferedReader reader;
   private PrintWriter writer;
   private Socket s;
-  final static int PORT = 2468;
+  final static int PORT = 8468;
   
   public Server()
   {

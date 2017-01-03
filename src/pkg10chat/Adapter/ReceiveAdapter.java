@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package pkg10chat.Adapter;
 
 import java.awt.Color;
@@ -26,29 +25,41 @@ public class ReceiveAdapter implements Observer
 {
   private Transmitter model;
   private ChatView view;
-  
+
   public ReceiveAdapter(Transmitter model, ChatView view)
   {
     this.view = view;
     this.model = model;
+  }
+
+  public void registerObserver()
+  {
     this.model.addObserver(this);
   }
 
   @Override
   public void update(Observable o, Object o1)
   {
-    this.view.getRbConnected().setSelected(this.model.getConnected());
-    SimpleAttributeSet aSet = new SimpleAttributeSet();
-    StyleConstants.setForeground(aSet, Color.blue);
-    
-    Document doc = this.view.getTpHistory().getDocument();
-    try
+    if (!o1.equals(null))
     {
-      doc.insertString(doc.getLength(),this.model.getRecvMessage() + System.lineSeparator() , aSet);
+      this.view.getRbConnected().setSelected(this.model.getConnected());
+      this.view.getMiConnect().setEnabled(!this.model.getConnected());
+      this.view.getMiDisconnect().setEnabled(this.model.getConnected());
     }
-    catch (BadLocationException ex)
+    else
     {
-      Logger.getLogger(ReceiveAdapter.class.getName()).log(Level.SEVERE, null, ex);
+      SimpleAttributeSet aSet = new SimpleAttributeSet();
+      StyleConstants.setForeground(aSet, Color.blue);
+
+      Document doc = this.view.getTpHistory().getDocument();
+      try
+      {
+        doc.insertString(doc.getLength(), this.model.getRecvMessage() + System.lineSeparator(), aSet);
+      }
+      catch (BadLocationException ex)
+      {
+        Logger.getLogger(ReceiveAdapter.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
   }
 }

@@ -49,8 +49,10 @@ public class ChatView extends javax.swing.JFrame
     rbConnected = new javax.swing.JRadioButton();
     jMenuBar1 = new javax.swing.JMenuBar();
     mnFile = new javax.swing.JMenu();
+    miClose = new javax.swing.JMenuItem();
     mnConnect = new javax.swing.JMenu();
     miConnect = new javax.swing.JMenuItem();
+    miDisconnect = new javax.swing.JMenuItem();
 
     jLabel1.setText("jLabel1");
 
@@ -101,6 +103,12 @@ public class ChatView extends javax.swing.JFrame
     getContentPane().add(jPanel2);
 
     mnFile.setText("File");
+
+    miClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.ALT_MASK));
+    miClose.setMnemonic('C');
+    miClose.setText("Close");
+    mnFile.add(miClose);
+
     jMenuBar1.add(mnFile);
 
     mnConnect.setText("Connection");
@@ -109,6 +117,11 @@ public class ChatView extends javax.swing.JFrame
     miConnect.setMnemonic('C');
     miConnect.setText("Connect");
     mnConnect.add(miConnect);
+
+    miDisconnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.ALT_MASK));
+    miDisconnect.setMnemonic('D');
+    miDisconnect.setText("Disconnect");
+    mnConnect.add(miDisconnect);
 
     jMenuBar1.add(mnConnect);
 
@@ -202,6 +215,16 @@ public class ChatView extends javax.swing.JFrame
     return miConnect;
   }
 
+  public JMenuItem getMiClose()
+  {
+    return miClose;
+  }
+
+  public JMenuItem getMiDisconnect()
+  {
+    return miDisconnect;
+  }
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton btnSend;
   private javax.swing.JLabel jLabel1;
@@ -210,7 +233,9 @@ public class ChatView extends javax.swing.JFrame
   private javax.swing.JPanel jPanel2;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
+  private javax.swing.JMenuItem miClose;
   private javax.swing.JMenuItem miConnect;
+  private javax.swing.JMenuItem miDisconnect;
   private javax.swing.JMenu mnConnect;
   private javax.swing.JMenu mnFile;
   private javax.swing.JRadioButton rbConnected;

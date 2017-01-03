@@ -38,7 +38,7 @@ public class SendController implements ActionListener
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    this.model.getServClient().send(this.view.getTaMessage().getText());
+    this.model.send(this.view.getTaMessage().getText());
     Document doc = this.view.getTpHistory().getDocument();
     try
     {

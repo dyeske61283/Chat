@@ -27,6 +27,7 @@ public class Start
     SendController sController = new SendController(model, view);
     sController.registerEvents();
     ReceiveAdapter rAdapter = new ReceiveAdapter(model, view);
+    rAdapter.registerObserver();
     view.setVisible(true);
   }
 

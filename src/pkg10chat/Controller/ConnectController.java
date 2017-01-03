@@ -32,20 +32,33 @@ public class ConnectController implements ActionListener
                                             null,options,options[0]);
     
     this.model.setServer(wahl == JOptionPane.YES_OPTION);
-    this.model.initServerClient();
   }
   public void registerEvents()
   {
     this.view.getMiConnect().addActionListener(this);
+    this.view.getMiDisconnect().addActionListener(this);
+    this.view.getMiClose().addActionListener(this);
   }
 
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    if(e.getSource() == this.view.getMiConnect())
-        this.model.connect();
-    
-    
+    if(e.getSource() == this.view.getMiConnect()) 
+    {
+      this.model.connect();
+    }
+    if(e.getSource() == this.view.getMiClose())
+    {
+      int wahl = JOptionPane.showConfirmDialog(this.view, "Do you really want to close this app?", "Close", JOptionPane.OK_CANCEL_OPTION);
+      if(wahl == JOptionPane.OK_OPTION)
+      {
+        System.exit(0);
+      }
+    }
+    if(e.getSource() == this.view.getMiDisconnect())
+    {
+      this.model.disconnect();
+    }
   }
   
 }

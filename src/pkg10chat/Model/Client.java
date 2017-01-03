@@ -26,7 +26,7 @@ public class Client implements ServerClientInterface
   private PrintWriter writer;
   private BufferedReader reader;
   private Socket s;
-  final static int PORT = 2468;
+  final static int PORT = 8468;
   final static String IPADRESSE = "127.0.0.1";
   
   public Client()
