@@ -22,15 +22,16 @@ import java.util.logging.Level;
  */
 public class Client implements ServerClientInterface
 {
+  private Boolean connected;
   private PrintWriter writer;
   private BufferedReader reader;
   private Socket s;
-  final static int PORT = 24680;
+  final static int PORT = 2468;
   final static String IPADRESSE = "127.0.0.1";
   
   public Client()
   {
-
+    connected = false;
   }
 
   @Override
@@ -39,11 +40,13 @@ public class Client implements ServerClientInterface
     try
     {
       s = new Socket(IPADRESSE, PORT);
+      this.connected = s.isConnected();
       InputStream is = s.getInputStream();
       InputStreamReader isr = new InputStreamReader(is);
       this.reader = new BufferedReader(isr);
       OutputStream os = s.getOutputStream();
       this.writer = new PrintWriter(os);
+      
     }
     catch(Exception ex)
     {
@@ -58,6 +61,7 @@ public class Client implements ServerClientInterface
     try
     {
       s.close();
+      this.connected = false;
     }
     catch (IOException ex)
     {
@@ -88,4 +92,16 @@ public class Client implements ServerClientInterface
     
     return message;
   }
+
+  public Boolean getConnected()
+  {
+    return connected;
+  }
+
+  public void setConnected(Boolean connected)
+  {
+    this.connected = connected;
+  }
+  
+  
 }

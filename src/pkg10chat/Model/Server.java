@@ -23,14 +23,15 @@ import java.util.logging.Level;
  */
 public class Server implements ServerClientInterface
 {
+  private Boolean connected;
   private BufferedReader reader;
   private PrintWriter writer;
   private Socket s;
-  final static int PORT = 24680;
+  final static int PORT = 2468;
   
   public Server()
   {
-
+    connected = false;
   }
 
   @Override
@@ -41,12 +42,14 @@ public class Server implements ServerClientInterface
       ServerSocket ss = new ServerSocket(PORT);
       //OhmLogger.getLogger().info("warte auf Verbindung..");
       this.s = ss.accept();
+      this.connected = s.isConnected();
       //OhmLogger.getLogger().info("Verbindung hergestellt.");
       InputStream is = s.getInputStream();
       InputStreamReader isr = new InputStreamReader(is);
       this.reader = new BufferedReader(isr);
       OutputStream os = s.getOutputStream();
       this.writer = new PrintWriter(os);
+      
     }
     catch(Exception ex)
     {
@@ -61,6 +64,7 @@ public class Server implements ServerClientInterface
     try
     {
       s.close();
+      this.connected = false;
       OhmLogger.getLogger().info("Verbindung geschlossen.");
     }
     catch (IOException ex)
@@ -91,6 +95,18 @@ public class Server implements ServerClientInterface
     }
     
     return message;
+  }
+
+  @Override
+  public void setConnected(Boolean connected)
+  {
+    this.connected = connected;
+  }
+
+  @Override
+  public Boolean getConnected()
+  {
+    return this.connected;
   }
 
 }

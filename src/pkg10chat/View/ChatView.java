@@ -7,6 +7,8 @@ package pkg10chat.View;
 
 import javax.swing.JButton;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
@@ -44,10 +46,11 @@ public class ChatView extends javax.swing.JFrame
     taMessage = new javax.swing.JTextArea();
     btnSend = new javax.swing.JButton();
     jPanel2 = new javax.swing.JPanel();
-    jRadioButton1 = new javax.swing.JRadioButton();
+    rbConnected = new javax.swing.JRadioButton();
     jMenuBar1 = new javax.swing.JMenuBar();
     mnFile = new javax.swing.JMenu();
     mnConnect = new javax.swing.JMenu();
+    miConnect = new javax.swing.JMenuItem();
 
     jLabel1.setText("jLabel1");
 
@@ -90,9 +93,10 @@ public class ChatView extends javax.swing.JFrame
 
     getContentPane().add(jPanel1);
 
-    jRadioButton1.setText("Connected");
-    jRadioButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    jPanel2.add(jRadioButton1);
+    rbConnected.setText("Connected");
+    rbConnected.setEnabled(false);
+    rbConnected.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    jPanel2.add(rbConnected);
 
     getContentPane().add(jPanel2);
 
@@ -100,6 +104,12 @@ public class ChatView extends javax.swing.JFrame
     jMenuBar1.add(mnFile);
 
     mnConnect.setText("Connection");
+
+    miConnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+    miConnect.setMnemonic('C');
+    miConnect.setText("Connect");
+    mnConnect.add(miConnect);
+
     jMenuBar1.add(mnConnect);
 
     setJMenuBar(jMenuBar1);
@@ -182,17 +192,28 @@ public class ChatView extends javax.swing.JFrame
     return tpHistory;
   }
 
+  public JRadioButton getRbConnected()
+  {
+    return rbConnected;
+  }
+
+  public JMenuItem getMiConnect()
+  {
+    return miConnect;
+  }
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton btnSend;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JMenuBar jMenuBar1;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
-  private javax.swing.JRadioButton jRadioButton1;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
+  private javax.swing.JMenuItem miConnect;
   private javax.swing.JMenu mnConnect;
   private javax.swing.JMenu mnFile;
+  private javax.swing.JRadioButton rbConnected;
   private javax.swing.JTextArea taMessage;
   private javax.swing.JTextPane tpHistory;
   // End of variables declaration//GEN-END:variables

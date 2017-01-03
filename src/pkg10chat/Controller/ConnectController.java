@@ -6,6 +6,8 @@
 
 package pkg10chat.Controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import pkg10chat.Model.Transmitter;
 import pkg10chat.View.ChatView;
@@ -14,7 +16,7 @@ import pkg10chat.View.ChatView;
  *
  * @author kevin
  */
-public class ConnectController
+public class ConnectController implements ActionListener
 {
   private Transmitter model;
   private ChatView view;
@@ -30,10 +32,19 @@ public class ConnectController
                                             null,options,options[0]);
     
     this.model.setServer(wahl == JOptionPane.YES_OPTION);
-    this.model.connect();
+    this.model.initServerClient();
   }
   public void registerEvents()
   {
+    this.view.getMiConnect().addActionListener(this);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e)
+  {
+    if(e.getSource() == this.view.getMiConnect())
+        this.model.connect();
+    
     
   }
   

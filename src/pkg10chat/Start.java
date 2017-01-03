@@ -6,7 +6,9 @@
 
 package pkg10chat;
 
+import pkg10chat.Adapter.ReceiveAdapter;
 import pkg10chat.Controller.ConnectController;
+import pkg10chat.Controller.SendController;
 import pkg10chat.Model.Transmitter;
 import pkg10chat.View.ChatView;
 
@@ -22,6 +24,9 @@ public class Start
     ChatView view = new ChatView();
     ConnectController cController = new ConnectController(view, model);
     cController.registerEvents();
+    SendController sController = new SendController(model, view);
+    sController.registerEvents();
+    ReceiveAdapter rAdapter = new ReceiveAdapter(model, view);
     view.setVisible(true);
   }
 

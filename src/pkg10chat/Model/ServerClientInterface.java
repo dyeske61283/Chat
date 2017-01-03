@@ -15,4 +15,6 @@ public interface ServerClientInterface
   public void disconnect();
   public void send(String message);
   public String receive();
+  public void setConnected(Boolean connected);
+  public Boolean getConnected();
 }
