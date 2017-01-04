@@ -5,7 +5,6 @@
  */
 package pkg10chat.Model;
 
-import Logger.OhmLogger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,117 +16,155 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author kevin
  */
-public class Transmitter extends Observable implements Runnable
+public class Transmitter extends Observable implements ServerClientInterface
 {
+  final Object[] options = {"Server","Client"};
+  private Boolean ready;
   private Boolean server;
-  private String recvMessage;
   private Boolean connected;
-  private PrintWriter writer;
-  private BufferedReader reader;
+  private String rcvMsg;
+  private Thread thd;
   private Socket s;
-  final static int PORT = 8468;
-  final static String IPADRESSE = "127.0.0.1";
+  private BufferedReader reader;
+  private PrintWriter writer;
 
   public Transmitter()
   {
-    server = false;
-    //OhmLogger.getLogger().log(Level.INFO, "Reached end of constructor of model");
+    int wahl = JOptionPane.showOptionDialog(null, "Do you want to be Server, or Client?",
+                                            "Connection",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,
+                                            null,options,options[0]);
+    
+    this.server = (wahl == JOptionPane.YES_OPTION);
+    connect();
+    rcvMsg = "";
+    thd = new Thread(this);
+    thd.start();
   }
 
-  public void connect()
-  {
-    if (!this.connected)
-    {
-      Thread thd = new Thread(this);
-      thd.start();
-    }
-  }
-
-  private void initServerClient()
+  @Override
+  public synchronized void connect()
   {
     if (server)
     {
       try
       {
-        ServerSocket ss = new ServerSocket(PORT);
-        //OhmLogger.getLogger().info("warte auf Verbindung..");
+        ServerSocket ss;
+        ss = new ServerSocket(PORT);
         this.s = ss.accept();
-        this.connected = s.isConnected();
-        //OhmLogger.getLogger().info("Verbindung hergestellt.");
-        InputStream is = s.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        this.reader = new BufferedReader(isr);
-        OutputStream os = s.getOutputStream();
-        this.writer = new PrintWriter(os);
-
       }
-      catch (Exception ex)
+      catch (IOException ex)
       {
-        OhmLogger.getLogger().severe("failed to establish server-side of the connection");
-        OhmLogger.getLogger().severe(ex.toString());
+        Logger.getLogger(Transmitter.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
     else
     {
       try
       {
-        s = new Socket(IPADRESSE, PORT);
-        this.connected = s.isConnected();
-        InputStream is = s.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        this.reader = new BufferedReader(isr);
-        OutputStream os = s.getOutputStream();
-        this.writer = new PrintWriter(os);
-
+        s = new Socket(IP, PORT);
       }
-      catch (Exception ex)
+      catch (IOException ex)
       {
-        OhmLogger.getLogger().severe("failed to establish client-side of the connection");
-        OhmLogger.getLogger().severe(ex.getMessage());
+        Logger.getLogger(Transmitter.class.getName()).log(Level.SEVERE, null, ex);
       }
+    }
+    try
+    {
+    OutputStream os = s.getOutputStream();
+    this.writer = new PrintWriter(os);
+    InputStream is = s.getInputStream();
+    InputStreamReader isr = new InputStreamReader(is);
+    this.reader = new BufferedReader(isr);
+    connected = true;
+    notifyAll();
+    this.setChanged();
+    this.notifyObservers();
+    }
+    catch(Exception ex)
+    {
+      System.err.println(ex.toString());
     }
   }
 
   @Override
-  public void run()
+  public void disconnect()
   {
-    OhmLogger.getLogger().log(Level.INFO, "right before connect call");
-    this.initServerClient();
-    OhmLogger.getLogger().log(Level.INFO, "right after connect");
-    this.setChanged();
-    this.notifyObservers(connected);
-    while (this.connected)
-    {
-      this.recvMessage = this.receive();
-      this.setChanged();
-      this.notifyObservers();
-
-    }
     try
     {
-      this.reader.close();
+      s.close();
+      writer.close();
+      reader.close();
+      connected = false;
     }
     catch (IOException ex)
     {
       Logger.getLogger(Transmitter.class.getName()).log(Level.SEVERE, null, ex);
     }
-    this.writer.close();
-    this.disconnect();
+
   }
 
+  @Override
+  public void send(String message)
+  {
+    this.writer.println(message);
+    this.writer.flush();
+  }
+
+  @Override
+  public String receive()
+  {
+    String msg = "";
+    try
+    {
+      msg = this.reader.readLine();
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(Transmitter.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return msg;
+  }
+
+  @Override
   public Boolean getConnected()
   {
-    return this.connected;
+    return connected;
   }
 
-  public void setConnected(Boolean connected)
+  @Override
+  public void run()
   {
-    this.connected = connected;
+    while (true)
+    {
+        this.rcvMsg = this.receive();
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+  }
+
+  private synchronized void parallelWork() throws InterruptedException
+  {
+    while (!ready)
+    {
+      wait();
+    }
+    while (!connected)
+    {
+      this.connect();
+    }
+    if (connected)
+    {
+      this.rcvMsg = this.receive();
+      this.setChanged();
+      this.notifyObservers();
+    }
   }
 
   public Boolean getServer()
@@ -135,51 +172,26 @@ public class Transmitter extends Observable implements Runnable
     return server;
   }
 
-  public void setServer(Boolean server)
+  public synchronized void setServer(Boolean server)
   {
     this.server = server;
+    this.ready = true;
+    notifyAll();
   }
 
-  public String getRecvMessage()
+  public String getRcvMsg()
   {
-    return recvMessage;
+    return rcvMsg;
   }
 
-  public void disconnect()
+  public Boolean getReady()
   {
-    try
-    {
-      s.close();
-      this.connected = false;
-      OhmLogger.getLogger().info("Verbindung geschlossen.");
-      this.setChanged();
-      this.notifyObservers(connected);
-    }
-    catch (IOException ex)
-    {
-      OhmLogger.getLogger().log(Level.SEVERE, null, ex);
-    }
+    return ready;
   }
 
-  public void send(String message)
+  public void setReady(Boolean ready)
   {
-    this.writer.println(message);
-    this.writer.flush();
+    this.ready = ready;
   }
 
-  public String receive()
-  {
-    String message = "";
-
-    try
-    {
-      message = this.reader.readLine();
-    }
-    catch (IOException ex)
-    {
-      OhmLogger.getLogger().log(Level.SEVERE, null, ex);
-    }
-
-    return message;
-  }
 }

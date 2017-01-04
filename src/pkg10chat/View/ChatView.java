@@ -63,8 +63,9 @@ public class ChatView extends javax.swing.JFrame
 
     jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 353));
 
+    tpHistory.setEditable(false);
     tpHistory.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-    tpHistory.setEnabled(false);
+    tpHistory.setDragEnabled(false);
     tpHistory.setFocusable(false);
     tpHistory.setMinimumSize(new java.awt.Dimension(280, 300));
     tpHistory.setPreferredSize(new java.awt.Dimension(280, 350));

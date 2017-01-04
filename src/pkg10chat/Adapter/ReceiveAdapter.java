@@ -11,9 +11,9 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import pkg10chat.Model.Transmitter;
 import pkg10chat.View.ChatView;
 
@@ -40,26 +40,22 @@ public class ReceiveAdapter implements Observer
   @Override
   public void update(Observable o, Object o1)
   {
-    if (!o1.equals(null))
-    {
-      this.view.getRbConnected().setSelected(this.model.getConnected());
-      this.view.getMiConnect().setEnabled(!this.model.getConnected());
-      this.view.getMiDisconnect().setEnabled(this.model.getConnected());
-    }
-    else
-    {
-      SimpleAttributeSet aSet = new SimpleAttributeSet();
-      StyleConstants.setForeground(aSet, Color.blue);
 
-      Document doc = this.view.getTpHistory().getDocument();
-      try
-      {
-        doc.insertString(doc.getLength(), this.model.getRecvMessage() + System.lineSeparator(), aSet);
-      }
-      catch (BadLocationException ex)
-      {
-        Logger.getLogger(ReceiveAdapter.class.getName()).log(Level.SEVERE, null, ex);
-      }
+    this.view.getRbConnected().setSelected(this.model.getConnected());
+    this.view.getMiConnect().setEnabled(!this.model.getConnected());
+    this.view.getMiDisconnect().setEnabled(this.model.getConnected());
+
+    StyledDocument doc = this.view.getTpHistory().getStyledDocument();
+    Style style = this.view.getTpHistory().addStyle("I'm a Style", null);
+    StyleConstants.setForeground(style, Color.blue);
+    
+    try
+    {
+      doc.insertString(doc.getLength(), this.model.getRcvMsg() + System.lineSeparator(), style);
+    }
+    catch (BadLocationException ex)
+    {
+      Logger.getLogger(ReceiveAdapter.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 }
