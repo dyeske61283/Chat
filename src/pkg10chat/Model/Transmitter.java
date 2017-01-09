@@ -24,7 +24,10 @@ import javax.swing.JOptionPane;
  */
 public class Transmitter extends Observable implements ServerClientInterface
 {
-  final Object[] options = {"Server","Client"};
+  final Object[] options =
+  {
+    "Server", "Client"
+  };
   private Boolean ready;
   private Boolean server;
   private Boolean connected;
@@ -37,12 +40,16 @@ public class Transmitter extends Observable implements ServerClientInterface
   public Transmitter()
   {
     int wahl = JOptionPane.showOptionDialog(null, "Do you want to be Server, or Client?",
-                                            "Connection",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,
-                                            null,options,options[0]);
-    
+                                            "Connection", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                            null, options, options[0]);
+
     this.server = (wahl == JOptionPane.YES_OPTION);
-    connect();
     rcvMsg = "";
+  }
+
+  public void connecting()
+  {
+    connect();
     thd = new Thread(this);
     thd.start();
   }
@@ -76,17 +83,17 @@ public class Transmitter extends Observable implements ServerClientInterface
     }
     try
     {
-    OutputStream os = s.getOutputStream();
-    this.writer = new PrintWriter(os);
-    InputStream is = s.getInputStream();
-    InputStreamReader isr = new InputStreamReader(is);
-    this.reader = new BufferedReader(isr);
-    connected = true;
-    notifyAll();
-    this.setChanged();
-    this.notifyObservers();
+      OutputStream os = s.getOutputStream();
+      this.writer = new PrintWriter(os);
+      InputStream is = s.getInputStream();
+      InputStreamReader isr = new InputStreamReader(is);
+      this.reader = new BufferedReader(isr);
+      connected = true;
+      notifyAll();
+      this.setChanged();
+      this.notifyObservers();
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
       System.err.println(ex.toString());
     }
@@ -101,6 +108,8 @@ public class Transmitter extends Observable implements ServerClientInterface
       writer.close();
       reader.close();
       connected = false;
+      setChanged();
+      notifyObservers();
     }
     catch (IOException ex)
     {
@@ -140,31 +149,16 @@ public class Transmitter extends Observable implements ServerClientInterface
   @Override
   public void run()
   {
-    while (true)
-    {
-        this.rcvMsg = this.receive();
-        this.setChanged();
-        this.notifyObservers();
-    }
-
-  }
-
-  private synchronized void parallelWork() throws InterruptedException
-  {
-    while (!ready)
-    {
-      wait();
-    }
-    while (!connected)
-    {
-      this.connect();
-    }
-    if (connected)
+    while (connected)
     {
       this.rcvMsg = this.receive();
-      this.setChanged();
-      this.notifyObservers();
+      if (rcvMsg != null && !rcvMsg.isEmpty())
+      {
+        this.setChanged();
+        this.notifyObservers();
+      }
     }
+
   }
 
   public Boolean getServer()

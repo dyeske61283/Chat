@@ -96,7 +96,7 @@ public class ChatView extends javax.swing.JFrame
 
     getContentPane().add(jPanel1);
 
-    rbConnected.setText("Connected");
+    rbConnected.setText("Disconnected");
     rbConnected.setEnabled(false);
     rbConnected.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     jPanel2.add(rbConnected);
@@ -122,6 +122,7 @@ public class ChatView extends javax.swing.JFrame
     miDisconnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.ALT_MASK));
     miDisconnect.setMnemonic('D');
     miDisconnect.setText("Disconnect");
+    miDisconnect.setEnabled(false);
     mnConnect.add(miDisconnect);
 
     jMenuBar1.add(mnConnect);

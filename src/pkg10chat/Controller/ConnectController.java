@@ -39,7 +39,9 @@ public class ConnectController implements ActionListener
   {
     if(e.getSource() == this.view.getMiConnect()) 
     {
-      this.model.connect();
+      this.view.getRbConnected().setText("Connecting..");
+      this.model.connecting();
+      
     }
     if(e.getSource() == this.view.getMiClose())
     {

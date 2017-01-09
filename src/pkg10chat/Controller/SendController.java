@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package pkg10chat.Controller;
 
 import Logger.OhmLogger;
@@ -23,13 +22,13 @@ public class SendController implements ActionListener
 {
   Transmitter model;
   ChatView view;
-  
+
   public SendController(Transmitter model, ChatView view)
   {
     this.view = view;
     this.model = model;
   }
-  
+
   public void registerEvents()
   {
     this.view.getBtnSend().addActionListener(this);
@@ -38,16 +37,20 @@ public class SendController implements ActionListener
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    this.model.send(this.view.getTaMessage().getText());
-    Document doc = this.view.getTpHistory().getDocument();
-    try
+    if (this.model.getConnected())
     {
-      doc.insertString(doc.getLength(),this.view.getTaMessage().getText() + System.lineSeparator(), null);
+      this.model.send(this.view.getTaMessage().getText());
+      Document doc = this.view.getTpHistory().getDocument();
+      try
+      {
+        doc.insertString(doc.getLength(), this.view.getTaMessage().getText() + System.lineSeparator(), null);
+      }
+      catch (BadLocationException ex)
+      {
+        OhmLogger.getLogger().log(Level.SEVERE, null, ex);
+      }
+      this.view.getTaMessage().setText("");
     }
-    catch (BadLocationException ex)
-    {
-      OhmLogger.getLogger().log(Level.SEVERE, null, ex);
-    }
-    this.view.getTaMessage().setText("");
+    this.view.getTaMessage().requestFocusInWindow();
   }
 }

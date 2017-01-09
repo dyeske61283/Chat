@@ -46,6 +46,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="68"/>
                 <Property name="text" type="java.lang.String" value="Disconnect"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -166,7 +167,7 @@
       <SubComponents>
         <Component class="javax.swing.JRadioButton" name="rbConnected">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Connected"/>
+            <Property name="text" type="java.lang.String" value="Disconnected"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>

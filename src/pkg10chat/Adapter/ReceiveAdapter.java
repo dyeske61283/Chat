@@ -11,6 +11,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -40,18 +41,35 @@ public class ReceiveAdapter implements Observer
   @Override
   public void update(Observable o, Object o1)
   {
-
-    this.view.getRbConnected().setSelected(this.model.getConnected());
-    this.view.getMiConnect().setEnabled(!this.model.getConnected());
-    this.view.getMiDisconnect().setEnabled(this.model.getConnected());
-
+    if(this.model.getConnected())
+    {
+      this.view.getRbConnected().setSelected(true);
+      this.view.getRbConnected().setText("Connected");
+      this.view.getMiConnect().setEnabled(false);
+      this.view.getMiDisconnect().setEnabled(true);
+    }
+    else
+    {
+      this.view.getRbConnected().setSelected(false);
+      this.view.getRbConnected().setText("Disconnected");
+      this.view.getMiConnect().setEnabled(true);
+      this.view.getMiDisconnect().setEnabled(false);
+    }
+    
+    
+    
     StyledDocument doc = this.view.getTpHistory().getStyledDocument();
+    SimpleAttributeSet attribs = new SimpleAttributeSet();
     Style style = this.view.getTpHistory().addStyle("I'm a Style", null);
     StyleConstants.setForeground(style, Color.blue);
-    
+    StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
+    int end = doc.getLength();
     try
     {
       doc.insertString(doc.getLength(), this.model.getRcvMsg() + System.lineSeparator(), style);
+      doc.setParagraphAttributes(end, doc.getLength(), attribs, false);
+      StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_LEFT);
+      doc.setParagraphAttributes(doc.getLength(), 0, attribs, false);
     }
     catch (BadLocationException ex)
     {
